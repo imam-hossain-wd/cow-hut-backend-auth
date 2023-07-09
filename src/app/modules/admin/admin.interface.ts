@@ -14,7 +14,7 @@ export type IAdmin ={
     updatedAt: Date;
 }
 
-export type UserModel = {
+export type AdminModel = {
   isUserExist(
     id: string
   ): Promise<Pick<IAdmin, '_id' | 'password' | 'role' >>;

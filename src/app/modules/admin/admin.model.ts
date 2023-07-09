@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
-import { IAdmin } from "./admin.interface";
+import { IAdmin , AdminModel} from "./admin.interface";
 import config from "../../../config";
 import bcrypt from 'bcrypt';
 
 
-const AdminSchema = new Schema<IAdmin>({
+const AdminSchema = new Schema<IAdmin, AdminModel>({
     _id: {
       type: String,
       required: true,
@@ -78,4 +78,4 @@ const AdminSchema = new Schema<IAdmin>({
     next();
   });
 
-  export const Admin = model<IAdmin>('Admin', AdminSchema);
+  export const Admin = model<IAdmin ,AdminModel>('Admin', AdminSchema);
