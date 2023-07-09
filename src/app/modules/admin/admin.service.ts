@@ -56,7 +56,6 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   } catch (err) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Refresh Token');
   }
-
   const { userId } = verifiedToken;
   const isUserExist = await Admin.isUserExist(userId);
   if (!isUserExist) {

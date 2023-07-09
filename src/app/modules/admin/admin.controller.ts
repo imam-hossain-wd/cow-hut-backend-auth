@@ -3,7 +3,8 @@ import catchAsync from '../../../shared/catchAsync';
 import { AdminService } from './admin.service';
 import config from '../../../config';
 // import config from '../../../config';
-
+import sendResponse from '../../../shared/sendResponse';
+import { IRefreshTokenResponse } from './admin.interface';
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
   const { ...adminData } = req.body;
   const result = await AdminService.createAdmin(adminData);
@@ -45,7 +46,27 @@ const login = catchAsync(async (req: Request,res: Response ) => {
   })
 });
 
+const refreshToken = catchAsync(async (req: Request, res: Response) => {
+  const { refreshToken } = req.cookies;
+  const result = await AdminService.refreshToken(refreshToken);
+  
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  };
+
+  res.cookie('refreshToken', refreshToken, cookieOptions);
+
+  sendResponse<IRefreshTokenResponse>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User lohggedin successfully !',
+    data: result,
+  });
+});
+
 export const AdminController = {
   createAdmin,
-  login
+  login,
+  refreshToken
 };
