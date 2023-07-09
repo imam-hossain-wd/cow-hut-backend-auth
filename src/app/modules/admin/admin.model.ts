@@ -10,7 +10,7 @@ const AdminSchema = new Schema<IAdmin>({
     phoneNumber: {
       type: String,
       required: true,
-      // unique:true
+      unique:true
     },
     role: {
       type: String,
@@ -20,7 +20,8 @@ const AdminSchema = new Schema<IAdmin>({
     password: {
       type: String,
       required: true,
-      // unique:true
+      select: 0,
+      unique:true
     },
     name: {
       firstName: {
@@ -44,6 +45,18 @@ const AdminSchema = new Schema<IAdmin>({
       type: Date,
       default: Date.now,
     },
+  });
+
+  AdminSchema.pre('save', async function (next) {
+    // hashing user password
+    const user = this;
+    user.password = await bcrypt.hash(
+      user.password,
+      Number(config.bycrypt_salt_rounds)
+    );
+  
+  
+    next();
   });
 
   export const Admin = model<IAdmin>('Admin', AdminSchema);

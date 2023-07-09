@@ -12,9 +12,3 @@ export type IAdmin ={
     createdAt: Date;
     updatedAt: Date;
 }
-
-// password: string;
-// role: string;
-
-// phoneNumber: string;
-// address: string;
