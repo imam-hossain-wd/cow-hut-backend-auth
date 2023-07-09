@@ -15,3 +15,4 @@ export type IUser = {
 export type IUserFilters = {
   searchTerm : string ;
 }
+ 

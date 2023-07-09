@@ -1,19 +1,16 @@
-import { Request, Response } from "express";
-import catchAsync from "../../../shared/catchAsync";
-import sendResponse from '../../../shared/sendResponse'
-import { IAdmin } from "./admin.interface";
+import { Request, Response } from 'express';
+import catchAsync from '../../../shared/catchAsync';
+import { AdminService } from './admin.service';
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
-   const {...userData} = req.body;
-   const 
-    sendResponse<IAdmin>(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'Admin created successfully !',
-      data: result,
-    });
+  const { ...adminData } = req.body;
+  console.log(adminData);
+  const result = AdminService.createAdmin(adminData);
+  res.status(200).json({
+    data: result,
   });
+});
 
-  export const AdminController ={
-    createAdmin
-  }
+export const AdminController = {
+  createAdmin,
+};

@@ -10,6 +10,7 @@ const AdminSchema = new Schema<IAdmin>({
     phoneNumber: {
       type: String,
       required: true,
+      unique:true
     },
     role: {
       type: String,
@@ -19,6 +20,7 @@ const AdminSchema = new Schema<IAdmin>({
     password: {
       type: String,
       required: true,
+      unique:true
     },
     name: {
       type: String,
