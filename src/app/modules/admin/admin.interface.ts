@@ -18,7 +18,10 @@ export type UserModel = {
   isUserExist(
     id: string
   ): Promise<Pick<IAdmin, '_id' | 'password' | 'role' >>;
-  
+  isPasswordMatched(
+    givenPassword: string,
+    savedPassword: string
+  ): Promise<boolean>;
 } & Model<IAdmin>;
 
 export type ILoginUser = {

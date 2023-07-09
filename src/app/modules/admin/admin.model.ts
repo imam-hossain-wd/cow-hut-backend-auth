@@ -66,7 +66,13 @@ const AdminSchema = new Schema<IAdmin>({
       );
     };
     
- 
+    AdminSchema.statics.isPasswordMatched = async function (
+      givenPassword: string,
+      savedPassword: string
+    ): Promise<boolean> {
+      return await bcrypt.compare(givenPassword, savedPassword);
+    };
+
   
   
     next();
