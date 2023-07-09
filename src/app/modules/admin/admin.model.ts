@@ -56,6 +56,17 @@ const AdminSchema = new Schema<IAdmin>({
       admin.password,
       Number(config.bcrypt_salt_rounds)
     );
+
+    AdminSchema.statics.isUserExist = async function (
+      id: string
+    ): Promise<IAdmin | null> {
+      return await Admin.findOne(
+        { id },
+        { id: 1, password: 1, role: 1, needsPasswordChange: 1 }
+      );
+    };
+    
+ 
   
   
     next();

@@ -1,3 +1,4 @@
+import { Model } from "mongoose";
 
 export type IAdmin ={
     _id: string;
@@ -12,6 +13,13 @@ export type IAdmin ={
     createdAt: Date;
     updatedAt: Date;
 }
+
+export type UserModel = {
+  isUserExist(
+    id: string
+  ): Promise<Pick<IAdmin, '_id' | 'password' | 'role' >>;
+  
+} & Model<IAdmin>;
 
 export type ILoginUser = {
   id: string;
