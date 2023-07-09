@@ -4,10 +4,17 @@ export type IAdmin ={
     phoneNumber: string;
     role: 'admin';
     password: string;
-    name: string;
-    firstName: string;
-    lastName: string;
+    name: {
+        firstName: string;
+        lastName: string;
+      };
     address: string;
     createdAt: Date;
     updatedAt: Date;
 }
+
+// password: string;
+// role: string;
+
+// phoneNumber: string;
+// address: string;

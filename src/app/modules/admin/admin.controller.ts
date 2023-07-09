@@ -4,10 +4,21 @@ import { AdminService } from './admin.service';
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
   const { ...adminData } = req.body;
-  console.log(adminData);
-  const result = AdminService.createAdmin(adminData);
+  const result = await AdminService.createAdmin(adminData);
   res.status(200).json({
-    data: result,
+    success: true,
+    statusCode: 200,
+    message: "Admin created successfully",
+    data: {
+      _id: result?._id,
+      role: result?.role,
+      name: {
+        firstName: result?.name?.firstName,
+        lastName: result?.name?.lastName,
+      },
+      phoneNumber: result?.phoneNumber,
+      address: result?.address,
+    },
   });
 });
 
