@@ -26,13 +26,23 @@ const logInAdmin = async (payload:ILoginUser): Promise<ILoginUserResponse> => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect');
   }
 
-  const { _id: userId, role, needsPasswordChange } = isUserExist;
-  
+  const { _id: userId, role } = isUserExist;
+
   const accessToken = jwtHelpers.createToken(
     { userId, role },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
   );
+
+  const refreshToken = jwtHelpers.createToken(
+    { userId, role },
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_expires_in as string
+  );
+  return {
+    accessToken,
+    refreshToken,
+  };
 
 };
 
