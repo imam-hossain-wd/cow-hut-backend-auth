@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
-import { IAdmin, ILoginUser, ILoginUserResponse } from './admin.interface';
+import { IAdmin, ILoginUser, ILoginUserResponse, IRefreshTokenResponse } from './admin.interface';
 import { Admin } from './admin.model';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import config from '../../../config';
@@ -46,9 +46,40 @@ const logInAdmin = async (payload:ILoginUser): Promise<ILoginUserResponse> => {
 
 };
 
+const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
+  let verifiedToken = null;
+  try {
+    verifiedToken = jwtHelpers.verifyToken(
+      token,
+      config.jwt.refresh_secret as Secret
+    );
+  } catch (err) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Refresh Token');
+  }
+
+  const { userId } = verifiedToken;
+  const isUserExist = await Admin.isUserExist(userId);
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+  }
+  const newAccessToken = jwtHelpers.createToken(
+    {
+      id: isUserExist._id,
+      role: isUserExist.role,
+    },
+    config.jwt.secret as Secret,
+    config.jwt.expires_in as string
+  );
+
+  return {
+    accessToken: newAccessToken,
+  };
+};
+
 
 
 export const AdminService = {
   createAdmin,
-  logInAdmin
+  logInAdmin,
+  refreshToken
 };
