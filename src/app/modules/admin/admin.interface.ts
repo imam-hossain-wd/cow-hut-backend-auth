@@ -12,3 +12,14 @@ export type IAdmin ={
     createdAt: Date;
     updatedAt: Date;
 }
+
+export type ILoginUser = {
+  id: string;
+  password: string;
+};
+
+export type ILoginUserResponse = {
+  accessToken: string;
+  refreshToken?: string;
+  needsPasswordChange: boolean;
+};
