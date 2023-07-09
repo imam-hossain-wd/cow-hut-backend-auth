@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import catchAsync from '../../../shared/catchAsync';
 import { AdminService } from './admin.service';
+import config from '../../../config';
+// import config from '../../../config';
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
   const { ...adminData } = req.body;
@@ -21,15 +23,26 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
     },
   });
 });
-const login = catchAsync(async (req: Request, res: Response) => {
-  const { ...logInData } = req.body;
-  const result = await AdminService.logInAdmin(logInData);
+
+
+const login = catchAsync(async (req: Request,res: Response ) => {
+  const {...loginData } = req.body;
+  const result = await AdminService.logInAdmin(loginData);
+  const { refreshToken, ...others } = result;
+
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  };
+  res.cookie('refreshToken', refreshToken, cookieOptions);
   res.status(200).json({
-    success: true,
-    statusCode: 200,
-    message: "Admin logged successfully",
-    data: result
-  });
+    success:true,
+    statusCode:200,
+    message:"Admin logged successfully",
+    data: {
+      accessToken: others
+    }
+  })
 });
 
 export const AdminController = {
