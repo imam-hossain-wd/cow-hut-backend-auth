@@ -54,11 +54,13 @@ AdminSchema.pre('save', async function (next) {
   next();
 });
 
+
 AdminSchema.statics.isUserExist = async function (
   phoneNumber: string
 ): Promise<IAdmin | null> {
 return await Admin.findOne({ phoneNumber },{ _id: 1,password: 1,role: 1, phoneNumber:1});
 };
+
 
 AdminSchema.statics.isPasswordMatched = async function (
   givenPassword: string,

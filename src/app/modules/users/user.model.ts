@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { IUser, UserModel } from './user.interface';
 import bcrypt from 'bcrypt'
+import config from '../../../config';
 
 const userSchema = new Schema<IUser ,UserModel>({
   password: {
@@ -45,7 +46,19 @@ const userSchema = new Schema<IUser ,UserModel>({
     type: Number,
     required: true,
   }
+
+  
 }, { timestamps: true })
+
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const admin = this;
+  admin.password = await bcrypt.hash(
+    admin.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
 
 
 userSchema.statics.isUserExist = async function (
