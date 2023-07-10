@@ -46,4 +46,11 @@ const userSchema = new Schema<IUser>({
   }
 }, { timestamps: true })
 
+
+userSchema.statics.isUserExist = async function (
+  phoneNumber: string
+): Promise<IUser | null> {
+return await User.findOne({ phoneNumber },{ _id: 1,password: 1,role: 1, phoneNumber:1});
+};
+
 export const User = model<IUser>('User', userSchema);
