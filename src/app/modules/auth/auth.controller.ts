@@ -17,7 +17,7 @@ const loginUser = catchAsync(async (req: Request,res: Response ) => {
   res.status(200).json({
     success:true,
     statusCode:200,
-    message:"Admin logged successfully",
+    message:"user logged in successfully",
     data: {
       accessToken: others
     }

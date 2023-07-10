@@ -24,6 +24,10 @@ const createUser: RequestHandler = catchAsync(
 );
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
+
+  console.log('user controller',req.headers.authorization);
+  console.log('req user',req.user);
+
   const filters = pick(req.query,['searchTerm', 'income', 'address', '_id'])
   const paginationOptions = pick(req.query, paginationFields);
   console.log(paginationOptions);
