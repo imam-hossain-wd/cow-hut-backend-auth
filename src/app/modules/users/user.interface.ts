@@ -1,5 +1,7 @@
+import { Model } from "mongoose";
 
 export type IUser = {
+  _id?:string;
   password: string;
   role: 'seller' | 'buyer';
   name: {
@@ -15,4 +17,13 @@ export type IUser = {
 export type IUserFilters = {
   searchTerm : string ;
 }
- 
+
+export type UserModel = {
+  isUserExist(
+    phoneNumber: string
+  ): Promise<Pick<IUser, '_id' | 'password' | 'role' >>;
+  isPasswordMatched(
+    givenPassword: string,
+    savedPassword: string
+  ): Promise<boolean>;
+} & Model<IUser>;

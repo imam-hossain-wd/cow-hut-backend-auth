@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose';
-import { IUser } from './user.interface';
+import { IUser, UserModel } from './user.interface';
+import bcrypt from 'bcrypt'
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser ,UserModel>({
   password: {
     type: String,
     required: true,
@@ -53,4 +54,11 @@ userSchema.statics.isUserExist = async function (
 return await User.findOne({ phoneNumber },{ _id: 1,password: 1,role: 1, phoneNumber:1});
 };
 
-export const User = model<IUser>('User', userSchema);
+userSchema.statics.isPasswordMatched = async function (
+  givenPassword: string,
+  savedPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(givenPassword, savedPassword);
+};
+
+export const User = model<IUser , UserModel>('User', userSchema);
