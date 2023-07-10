@@ -1,26 +1,28 @@
+import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
+import { authService } from "./auth.service";
+import config from "../../../config";
 
 
-const loginUser = catchAsync(async (req: Request, res: Response) => {
-    const { ...loginData } = req.body;
-    const result = await AuthService.loginUser(loginData);
-    const { refreshToken, ...others } = result;
-  
-    // set refresh token into cookie
-    const cookieOptions = {
-      secure: config.env === 'production',
-      httpOnly: true,
-    };
-  
-    res.cookie('refreshToken', refreshToken, cookieOptions);
-  
-    sendResponse<ILoginUserResponse>(res, {
-      statusCode: 200,
-      success: true,
-      message: 'User logged in successfully !',
-      data: others,
-    });
-  });
+const loginUser = catchAsync(async (req: Request,res: Response ) => {
+  const {...loginData } = req.body;
+  const result = await authService.loginUser(loginData);
+  const { refreshToken, ...others } = result;
+
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  };
+  res.cookie('refreshToken', refreshToken, cookieOptions);
+  res.status(200).json({
+    success:true,
+    statusCode:200,
+    message:"Admin logged successfully",
+    data: {
+      accessToken: others
+    }
+  })
+});
 
   export const authController ={
     loginUser
