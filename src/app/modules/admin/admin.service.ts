@@ -56,11 +56,14 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   } catch (err) {
     throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Refresh Token');
   }
-  const { userId } = verifiedToken;
-  const isUserExist = await Admin.isUserExist(userId);
+  const { _id } = verifiedToken;;
+  const isUserExist = await Admin.findOne({ _id})
+
   if (!isUserExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User does not exist');
+    console.log('user does not exit');
   }
+
   const newAccessToken = jwtHelpers.createToken(
     {
       id: isUserExist._id,

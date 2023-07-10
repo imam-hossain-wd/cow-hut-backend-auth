@@ -4,10 +4,6 @@ import config from '../../../config';
 import bcrypt from 'bcrypt';
 
 const AdminSchema = new Schema<IAdmin, AdminModel>({
-  _id: {
-    type: String,
-    required: true,
-  },
   phoneNumber: {
     type: String,
     required: true,
