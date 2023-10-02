@@ -42,7 +42,7 @@ const login = catchAsync(async (req: Request,res: Response ) => {
     statusCode:200,
     message:"Admin logged successfully",
     data: {
-      accessToken: others
+      accessToken: others.accessToken
     }
   })
 });

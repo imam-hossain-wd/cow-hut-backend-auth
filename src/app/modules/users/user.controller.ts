@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { userService } from './user.service';
 import { IUser} from './user.interface';
 import httpStatus from 'http-status';
@@ -8,20 +8,6 @@ import pick from '../../../shared/pick';
 import { paginationFields } from '../../../constants/paginations';
 
 
-
-const createUser: RequestHandler = catchAsync(
-  async (req: Request, res: Response) => {
-     const user = req.body;
-    const result = await userService.createUser(user);
-
-    sendResponse<IUser>(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'user created successfully!',
-      data: result,
-    })
-  }
-);
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
@@ -84,7 +70,6 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const userController = {
-  createUser,
   getAllUsers,
   getSingleUser,
   updateUser,

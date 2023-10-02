@@ -7,13 +7,10 @@ import auth from "../../middlewares/auth";
 
 const router = Router();
   
-router.post('/singup',userController.createUser);
-router.get('/:id',userController.getSingleUser);
-
-router.delete('/:id', userController.deleteUser);
-router.get('/',userController.getAllUsers);
+router.get('/:id',auth(ENUM_USER_ROLE.ADMIN),userController.getSingleUser);
+router.delete('/:id',auth(ENUM_USER_ROLE.ADMIN), userController.deleteUser);
 router.get('/', auth(ENUM_USER_ROLE.ADMIN), userController.getAllUsers);
-router.patch('/:id',userController.updateUser);
+router.patch('/:id',auth(ENUM_USER_ROLE.ADMIN),userController.updateUser);
 
 
 

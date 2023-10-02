@@ -49,9 +49,9 @@ const userSchema = new Schema<IUser, UserModel>(
 
 userSchema.pre('save', async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const admin = this;
-  admin.password = await bcrypt.hash(
-    admin.password,
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
     Number(config.bcrypt_salt_rounds)
   );
   next();
