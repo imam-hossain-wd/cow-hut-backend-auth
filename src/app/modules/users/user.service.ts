@@ -6,6 +6,9 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IGenericResponse } from '../../../interfaces/common';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { SortOrder } from 'mongoose';
+import { jwtHelpers } from '../../../helpers/jwtHelpers';
+import config from '../../../config';
+import { Secret } from 'jsonwebtoken';
 
 
 
@@ -68,6 +71,17 @@ const getAllUsers = async (
   };
 };
 
+const getMyProfile = async(token:string) => {
+  const user =  jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+  const {_id}= user;
+
+  const result= await User.findOne({_id});
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user is not found');
+  }
+  return result;
+}
+
 const getSingleUser = async (id: string): Promise<IUser | null> => {
   const isexits = await User.findOne({ _id: id });
   if (!isexits) {
@@ -101,6 +115,7 @@ const deleteUser = async (id: string): Promise<IUser | null> => {
 export const userService = {
   getAllUsers,
   getSingleUser,
+  getMyProfile,
   deleteUser,
   updateUser,
 };

@@ -9,6 +9,7 @@ import { paginationFields } from '../../../constants/paginations';
 
 
 
+
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 
   console.log('user controller',req.headers.authorization);
@@ -25,6 +26,19 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
     message: 'get all users successfully',
     meta: result.meta,
     data: result.data
+  });
+});
+
+
+
+const getProfile = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const result = await userService.getMyProfile(token);
+  sendResponse<IUser>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User's information retrieved successfully",
+    data: result,
   });
 });
 
@@ -71,6 +85,7 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 
 export const userController = {
   getAllUsers,
+  getProfile,
   getSingleUser,
   updateUser,
   deleteUser,

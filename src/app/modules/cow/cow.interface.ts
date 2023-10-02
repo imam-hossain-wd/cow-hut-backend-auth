@@ -32,18 +32,6 @@ enum Category {
   Beef = 'Beef',
   DualPurpose = 'Dual Purpose',
 }
-enum SortOrder {
-  Asc = 'asc',
-  Desc = 'desc',
-  None = 'none',
-}
-
-type IPaginationOptions ={
-  page: number;
-  limit: number;
-  sortBy?: string;
-  sortOrder?: SortOrder | undefined;
-}
 
  type ICow = {
   name: string;
@@ -55,6 +43,19 @@ type IPaginationOptions ={
   label: Label;
   category: Category;
   seller: mongoose.Types.ObjectId; 
+}
+
+enum SortOrder {
+  Asc = 'asc',
+  Desc = 'desc',
+  None = 'none',
+}
+
+type IPaginationOptions ={
+  page: number;
+  limit: number;
+  sortBy?: string;
+  sortOrder?: SortOrder | undefined;
 }
 
 export { ICow, Location, Breed, Label, Category, IPaginationOptions };

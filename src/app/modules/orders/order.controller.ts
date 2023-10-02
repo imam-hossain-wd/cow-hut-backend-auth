@@ -6,8 +6,7 @@ import { orderService } from './order.service';
 
 const createOrder = catchAsync(async (req: Request, res: Response) => {
     const { cow, buyer } = req.body;
-      const newOrder = await orderService.createOrder(cow, buyer);
-  
+    const newOrder = await orderService.createOrder(cow, buyer)
       sendResponse(res, {
         statusCode: 200,
         success: true,

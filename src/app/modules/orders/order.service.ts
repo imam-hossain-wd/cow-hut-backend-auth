@@ -9,49 +9,83 @@ import IOrder from './order.interface';
 //: Promise<IOrder>
 
 const createOrder = async (
-  cowId: Types.ObjectId,
-  buyerId: Types.ObjectId
+  // cowId: Types.ObjectId,
+  // buyerId: Types.ObjectId
+  cowId: string,
+  buyerId: string
 ) => {  
-    const cow = await Cow.findById(cowId);
-    const buyer = await User.findById(buyerId);
-  
-    if (!cow) {
-      throw new Error('Cow not found');
-    }
-    if (!buyer) {
-      throw new Error('Buyer not found');
-    }
-    if (buyer.budget < cow.price) {
-      throw new Error("Can't Buy! Insufficient budget")
-    }
-  const session = await Order.startSession();
+  console.log(cowId, buyerId);
+  const cow = await Cow.findById(cowId);
+  console.log(cow);
+    // const cow = await Cow.findById({_id:cowId});
+    // console.log(cow);
+    // const buyer = await User.findById(buyerId);
+    // const seller = await User.findById(cow?.seller);
 
-  session.startTransaction();
 
-  try {
-    cow.label = Label.SoldOut;
-    await cow.save();
+    // if (!cow) {
+    //   throw new Error('Cow not found');
+    // }
+    // if (!buyer) {
+    //   throw new Error('Buyer not found');
+    // }
+    // if (buyer.budget < cow.price) {
+    //   throw new Error("Can't Buy! Insufficient budget")
+    // }
 
-    buyer.budget -= cow.price;
-    await buyer.save();
+    //   console.log(buyer.budget, 'buyer budget');
+    //   console.log(cow.price, 'cow price');
+    //   console.log(buyer.budget -= cow.price, 'reaming budget balance');
 
-    const seller = await User.findById(cow.seller);
-    if (seller) {
-      seller.income += cow.price;
-      await seller.save();
-    }
+    //  if(seller){
+    //   console.log('seller income', seller.income += cow.price);
+    //  }
 
-    const order: IOrder = await Order.create({ cow: cowId, buyer: buyerId });
+    // cow.label = Label.SoldOut;
+    // await cow.save();
 
-    await session.commitTransaction();
-    session.endSession();
+    // buyer.budget -= cow.price;
+    // await buyer.save();
 
-    return order;
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
+    
+
+    // if (seller) {
+    //   seller.income += cow.price;
+    //   await seller.save();
+    // }
+
+    // const order: IOrder = await Order.create({ cow: cowId, buyer: buyerId });
+    // return order;
+
+//   const session = await Order.startSession();
+
+//   session.startTransaction();
+
+//   try {
+    // cow.label = Label.SoldOut;
+    // await cow.save();
+
+    // buyer.budget -= cow.price;
+    // await buyer.save();
+
+    // const seller = await User.findById(cow.seller);
+    // console.log(seller, 'seller');
+    // if (seller) {
+    //   seller.income += cow.price;
+    //   await seller.save();
+    // }
+
+    // const order: IOrder = await Order.create({ cow: cowId, buyer: buyerId });
+// console.log(order, 'order');
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     return order;
+//   } catch (error) {
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw error;
+//   }
   
 };
 
