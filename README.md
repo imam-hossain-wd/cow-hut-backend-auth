@@ -45,5 +45,8 @@ My Profile
 get profile: /users/my-profile   (get method)
 update profile : /users/my-profile  (patch method)
 
+get admin profile : /admins/my-profile 
+update admin profile : /admins/my-profile  (patch method)
+
 
 # l2b1a4-cow-hut-admin-auth-imam-hossain1

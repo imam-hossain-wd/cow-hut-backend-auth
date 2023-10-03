@@ -4,6 +4,7 @@ import { AdminService } from './admin.service';
 import config from '../../../config';
 import sendResponse from '../../../shared/sendResponse';
 import { IRefreshTokenResponse } from './admin.interface';
+import httpStatus from 'http-status';
 
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
@@ -47,6 +48,36 @@ const login = catchAsync(async (req: Request,res: Response ) => {
   })
 });
 
+const getAdminProfile = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const result = await AdminService.getAdminProfile(token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User's information retrieved successfully",
+    data: result,
+  });
+});
+
+
+const updateAdminProfile = catchAsync(async (req: Request, res: Response) => {
+  const data = req.body;
+  const token = req.headers.authorization as string;
+  const result = await AdminService.updateAdminProfile(token, data);
+  const updatedData = {
+      name:result?.name,
+     phoneNumber:result?.phoneNumber,
+     address:result?.address,
+     password:result?.password
+  }
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User's information updated successfully",
+    data: updatedData,
+  });
+});
+
 const refreshToken = catchAsync(async (req: Request, res: Response) => {
   const { refreshToken } = req.cookies;
   const result = await AdminService.refreshToken(refreshToken);
@@ -67,5 +98,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
 export const AdminController = {
   createAdmin,
   login,
-  refreshToken
+  refreshToken,
+  updateAdminProfile,
+  getAdminProfile
 };

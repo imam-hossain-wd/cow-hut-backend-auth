@@ -8,6 +8,7 @@ const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const admin_service_1 = require("./admin.service");
 const config_1 = __importDefault(require("../../../config"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
+const http_status_1 = __importDefault(require("http-status"));
 const createAdmin = (0, catchAsync_1.default)(async (req, res) => {
     const { ...adminData } = req.body;
     const result = await admin_service_1.AdminService.createAdmin(adminData);
@@ -45,6 +46,33 @@ const login = (0, catchAsync_1.default)(async (req, res) => {
         }
     });
 });
+const getAdminProfile = (0, catchAsync_1.default)(async (req, res) => {
+    const token = req.headers.authorization;
+    const result = await admin_service_1.AdminService.getAdminProfile(token);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User's information retrieved successfully",
+        data: result,
+    });
+});
+const updateAdminProfile = (0, catchAsync_1.default)(async (req, res) => {
+    const data = req.body;
+    const token = req.headers.authorization;
+    const result = await admin_service_1.AdminService.updateAdminProfile(token, data);
+    const updatedData = {
+        name: result?.name,
+        phoneNumber: result?.phoneNumber,
+        address: result?.address,
+        password: result?.password
+    };
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "User's information updated successfully",
+        data: updatedData,
+    });
+});
 const refreshToken = (0, catchAsync_1.default)(async (req, res) => {
     const { refreshToken } = req.cookies;
     const result = await admin_service_1.AdminService.refreshToken(refreshToken);
@@ -63,5 +91,7 @@ const refreshToken = (0, catchAsync_1.default)(async (req, res) => {
 exports.AdminController = {
     createAdmin,
     login,
-    refreshToken
+    refreshToken,
+    updateAdminProfile,
+    getAdminProfile
 };

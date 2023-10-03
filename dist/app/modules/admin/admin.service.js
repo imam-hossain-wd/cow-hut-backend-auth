@@ -9,6 +9,7 @@ const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const admin_model_1 = require("./admin.model");
 const jwtHelpers_1 = require("../../../helpers/jwtHelpers");
 const config_1 = __importDefault(require("../../../config"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const createAdmin = async (payload) => {
     const admin = await admin_model_1.Admin.create(payload);
     return admin;
@@ -54,8 +55,32 @@ const refreshToken = async (token) => {
         accessToken: newAccessToken,
     };
 };
+const getAdminProfile = async (token) => {
+    const user = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
+    const result = await admin_model_1.Admin.findOne({ _id: user._id });
+    if (!result) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'Admin is not found');
+    }
+    return result;
+};
+const updateAdminProfile = async (token, data) => {
+    const user = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
+    const isUserExit = await admin_model_1.Admin.findOne({ _id: user._id });
+    if (!isUserExit) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'user is not found');
+    }
+    if (data.password) {
+        data.password = await bcrypt_1.default.hash(data.password, Number(config_1.default.bcrypt_salt_rounds));
+    }
+    const result = await admin_model_1.Admin.findOneAndUpdate({ _id: user._id }, data, {
+        new: true,
+    });
+    return result;
+};
 exports.AdminService = {
     createAdmin,
     logInAdmin,
-    refreshToken
+    refreshToken,
+    getAdminProfile,
+    updateAdminProfile
 };

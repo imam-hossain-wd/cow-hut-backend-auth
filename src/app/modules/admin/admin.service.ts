@@ -5,6 +5,8 @@ import { Admin } from './admin.model';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import { Secret } from 'jsonwebtoken';
 import config from '../../../config';
+import { IUserProfile, IUserProfileResponse } from '../users/user.interface';
+import bcrypt from 'bcrypt';
 
 
 const createAdmin = async (payload: IAdmin):  Promise<IAdmin> => {
@@ -79,9 +81,36 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   };
 };
 
+const getAdminProfile = async(token:string):Promise<IUserProfileResponse> => {
+  const user =  jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+  const result= await Admin.findOne({_id:user._id});
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Admin is not found');
+  }
+  return result;
+}
+
+const updateAdminProfile = async(token:string, data:IUserProfile):Promise<IUserProfileResponse | null> => {
+  const user =  jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
+  const isUserExit= await Admin.findOne({_id:user._id});
+  if (!isUserExit) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user is not found');
+  }
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, Number(config.bcrypt_salt_rounds));
+  }
+  const result = await Admin.findOneAndUpdate({ _id:user._id }, data, {
+    new: true,
+  });
+  return result;
+  
+}
+
 
 export const AdminService = {
   createAdmin,
   logInAdmin,
-  refreshToken
+  refreshToken,
+  getAdminProfile,
+  updateAdminProfile
 };
