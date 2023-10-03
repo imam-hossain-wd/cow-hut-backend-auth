@@ -54,7 +54,7 @@ const getAllUsers = async (paginationOptions, filters) => {
 };
 const getMyProfile = async (token) => {
     const user = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-    const result = await user_model_1.User.findOne({ _id: user.id });
+    const result = await user_model_1.User.findOne({ _id: user._id });
     if (!result) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'user is not found');
     }
@@ -62,14 +62,14 @@ const getMyProfile = async (token) => {
 };
 const updateMyProfile = async (token, data) => {
     const user = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.secret);
-    const isUserExit = await user_model_1.User.findOne({ _id: user.id });
+    const isUserExit = await user_model_1.User.findOne({ _id: user._id });
     if (!isUserExit) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, 'user is not found');
     }
     if (data.password) {
         data.password = await bcrypt_1.default.hash(data.password, Number(config_1.default.bcrypt_salt_rounds));
     }
-    const result = await user_model_1.User.findOneAndUpdate({ _id: user.id }, data, {
+    const result = await user_model_1.User.findOneAndUpdate({ _id: user._id }, data, {
         new: true,
     });
     return result;

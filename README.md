@@ -1,7 +1,7 @@
 # l2a3-cow-hut-backend-assignment-imam-hossain1
 
 
-root_url : https://cow-hut-backend-auth-teal.vercel.app/api/v1/
+root_url : https://cow-hut-backend-auth-umber.vercel.app/api/v1/
 
 Auth (User)
 

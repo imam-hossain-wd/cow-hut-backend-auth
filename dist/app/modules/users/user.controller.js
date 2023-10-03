@@ -37,7 +37,6 @@ const updateMyProfile = (0, catchAsync_1.default)(async (req, res) => {
     const data = req.body;
     const token = req.headers.authorization;
     const result = await user_service_1.userService.updateMyProfile(token, data);
-    console.log(result);
     const updatedData = {
         name: result?.name,
         phoneNumber: result?.phoneNumber,

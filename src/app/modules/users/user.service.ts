@@ -74,7 +74,7 @@ const getAllUsers = async (
 
 const getMyProfile = async(token:string):Promise<IUserProfileResponse> => {
   const user =  jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
-  const result= await User.findOne({_id:user.id});
+  const result= await User.findOne({_id:user._id});
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, 'user is not found');
   }
@@ -83,14 +83,14 @@ const getMyProfile = async(token:string):Promise<IUserProfileResponse> => {
 
 const updateMyProfile = async(token:string, data:IUserProfile):Promise<IUserProfileResponse | null> => {
   const user =  jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
-  const isUserExit= await User.findOne({_id:user.id});
+  const isUserExit= await User.findOne({_id:user._id});
   if (!isUserExit) {
     throw new ApiError(httpStatus.NOT_FOUND, 'user is not found');
   }
   if (data.password) {
     data.password = await bcrypt.hash(data.password, Number(config.bcrypt_salt_rounds));
   }
-  const result = await User.findOneAndUpdate({ _id:user.id }, data, {
+  const result = await User.findOneAndUpdate({ _id:user._id }, data, {
     new: true,
   });
   return result;

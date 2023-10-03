@@ -9,5 +9,6 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const user_1 = require("../../../enums/user");
 const router = (0, express_1.Router)();
 router.post('/', (0, auth_1.default)(user_1.ENUM_USER_ROLE.BUYER), order_controller_1.ordersController.createOrder);
-router.get('/', (0, auth_1.default)(user_1.ENUM_USER_ROLE.BUYER, user_1.ENUM_USER_ROLE.ADMIN), order_controller_1.ordersController.getAllOrders);
+router.get('/', (0, auth_1.default)(user_1.ENUM_USER_ROLE.BUYER, user_1.ENUM_USER_ROLE.ADMIN, user_1.ENUM_USER_ROLE.SELLER), order_controller_1.ordersController.getAllOrders);
+router.get('/:id', order_controller_1.ordersController.getSingleOrder);
 exports.default = router;
