@@ -11,8 +11,10 @@ auth(ENUM_USER_ROLE.BUYER),
  ordersController.createOrder);
 
 router.get('/',
-auth(ENUM_USER_ROLE.BUYER, ENUM_USER_ROLE.ADMIN),
- ordersController.getAllOrders)
+auth(ENUM_USER_ROLE.BUYER, ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SELLER),
+ ordersController.getAllOrders);
+
+ router.get('/:id', ordersController.getSingleOrder)
 
 
 export default router;

@@ -9,6 +9,7 @@ import { SortOrder } from 'mongoose';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
 import config from '../../../config';
 import { Secret } from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 
 
@@ -82,10 +83,12 @@ const getMyProfile = async(token:string):Promise<IUserProfileResponse> => {
 
 const updateMyProfile = async(token:string, data:IUserProfile):Promise<IUserProfileResponse | null> => {
   const user =  jwtHelpers.verifyToken(token, config.jwt.secret as Secret);
-
   const isUserExit= await User.findOne({_id:user.id});
   if (!isUserExit) {
     throw new ApiError(httpStatus.NOT_FOUND, 'user is not found');
+  }
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, Number(config.bcrypt_salt_rounds));
   }
   const result = await User.findOneAndUpdate({ _id:user.id }, data, {
     new: true,

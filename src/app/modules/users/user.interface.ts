@@ -21,11 +21,10 @@ export type IUserProfileResponse = {
   };
   phoneNumber: string;
   address: string;
+  password:string;
 };
 
-export type IUserProfile = Partial<IUserProfileResponse> & {
-  password?: string;
-};
+export type IUserProfile = Partial<IUserProfileResponse> ;
 
 export type IUserFilters = {
   searchTerm : string ;
