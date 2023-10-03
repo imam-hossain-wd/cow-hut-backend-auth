@@ -10,7 +10,12 @@ router.get('/',
 auth(ENUM_USER_ROLE.ADMIN),
 userController.getAllUsers)
 
-router.get('/profile', userController.getProfile)
+router.get('/my-profile',
+userController.getProfile)
+
+router.patch('/my-profile',userController.updateMyProfile )
+
+
 router.get('/:id',
 auth(ENUM_USER_ROLE.ADMIN),
 userController.getSingleUser);

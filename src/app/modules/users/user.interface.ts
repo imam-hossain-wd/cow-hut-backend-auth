@@ -14,6 +14,19 @@ export type IUser = {
   income: number;
 };
 
+export type IUserProfileResponse = {
+  name: {
+    firstName: string;
+    lastName: string;
+  };
+  phoneNumber: string;
+  address: string;
+};
+
+export type IUserProfile = Partial<IUserProfileResponse> & {
+  password?: string;
+};
+
 export type IUserFilters = {
   searchTerm : string ;
 }

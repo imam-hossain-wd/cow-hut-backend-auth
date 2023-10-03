@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { userService } from './user.service';
-import { IUser} from './user.interface';
+import { IUser, IUserProfileResponse} from './user.interface';
 import httpStatus from 'http-status';
 import sendResponse from '../../../shared/sendResponse';
 import catchAsync from '../../../shared/catchAsync';
@@ -11,9 +11,6 @@ import { paginationFields } from '../../../constants/paginations';
 
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-
-  console.log('user controller',req.headers.authorization);
-  console.log('req user',req.user);
 
   const filters = pick(req.query,['searchTerm', 'income', 'address', '_id'])
   const paginationOptions = pick(req.query, paginationFields);
@@ -34,10 +31,24 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 const getProfile = catchAsync(async (req: Request, res: Response) => {
   const token = req.headers.authorization as string;
   const result = await userService.getMyProfile(token);
-  sendResponse<IUser>(res, {
+  sendResponse<IUserProfileResponse>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "User's information retrieved successfully",
+    data: result,
+  });
+});
+
+
+const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
+  const data = req.body;
+  const token = req.headers.authorization as string;
+
+  const result = await userService.updateMyProfile(token, data);
+  sendResponse<IUserProfileResponse>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User's information updated successfully",
     data: result,
   });
 });
@@ -86,6 +97,7 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 export const userController = {
   getAllUsers,
   getProfile,
+  updateMyProfile,
   getSingleUser,
   updateUser,
   deleteUser,
