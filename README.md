@@ -5,9 +5,9 @@ root_url : https://cow-hut-backend-auth-umber.vercel.app/api/v1/
 
 Auth (User)
 
-create user : /auth/singup
+create user : /auth/signup
 login user : /auth/login
-refresh-token : /auth/refresh-token 
+refresh-token : /auth/refresh-token
 
 Auth (Admin)
 
